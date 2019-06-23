@@ -9,6 +9,7 @@ import net.minecraft.client.gui.hud.*;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AbsoluteHand;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -64,7 +65,9 @@ public abstract class InGameHudMixin extends DrawableHelper {
             boolean smallScale = false;
 
             // Smaller screen resolution
-            if (this.scaledWidth < 182 + (texWidth + padding) * 2) {
+            AbsoluteHand hand = playerEntity.getMainHand();
+            int hotbarWidth = 182 + (hand == AbsoluteHand.LEFT ? 29 : 0) * 2;
+            if (this.scaledWidth < hotbarWidth + (texWidth + padding) * 2) {
                 width /= 2;
                 height /= 2;
                 slotSize /= 2;
