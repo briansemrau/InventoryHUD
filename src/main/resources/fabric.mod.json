@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "inventory_hud",
+  "version": "${version}",
+
+  "name": "Inventory HUD",
+  "description": "Adds your inventory to your HUD. Nice!",
+  "authors": [
+    "brian_flakes"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/briansemrau/InventoryHUD"
+  },
+
+  "license": "MIT",
+  "icon": "assets/inventory_hud/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.briansemrau.inventoryhud.InventoryHUDMod"
+    ]
+  },
+  "mixins": [
+    "inventory_hud.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
