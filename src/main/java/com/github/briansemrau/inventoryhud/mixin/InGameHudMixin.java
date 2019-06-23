@@ -112,8 +112,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
     private void renderInventory(float float_1) {
         PlayerEntity playerEntity = this.getCameraPlayer();
         if (playerEntity != null) {
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
-//            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.6F);
 
             this.client.getTextureManager().bindTexture(BACKGROUND_TEXTURE);
             int padding = 5;
@@ -154,6 +153,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
             }
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
+                    // Draw item
                     int x = xLeft + (j * slotSize);
                     int y = yBottom - ((3 - i) * slotSize);
                     if (smallScale) {
