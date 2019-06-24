@@ -52,7 +52,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
     private void renderInventory(float float_1) {
         PlayerEntity playerEntity = this.getCameraPlayer();
         if (playerEntity != null) {
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, InventoryHUDMod.CONFIG.opacity);
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, InventoryHUDMod.CONFIG.alpha);
 
             this.client.getTextureManager().bindTexture(INVENTORY_TEX);
             int padding = 5;
@@ -80,37 +80,39 @@ public abstract class InGameHudMixin extends DrawableHelper {
             int yBottom = this.scaledHeight - padding;
 
             // Draw inventory background
-            blit(xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
+            if (InventoryHUDMod.CONFIG.show) {
+                blit(xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
 
-            // Draw items
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.enableRescaleNormal();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            GuiLighting.enableForItems();
+                // Draw items
+                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.enableBlend();
+                GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                GuiLighting.enableForItems();
 
-            if (smallScale) {
-                GlStateManager.pushMatrix();
-                GlStateManager.scalef(0.5F, 0.5F, 1F);
-            }
-            for (int i = 0; i < 3; ++i) {
-                for (int j = 0; j < 9; ++j) {
-                    // Draw item
-                    int x = xLeft + (j * slotSize);
-                    int y = yBottom - ((3 - i) * slotSize);
-                    if (smallScale) {
-                        x *= 2;
-                        y *= 2;
-                    }
-                    this.renderHotbarItem(x + 1, y + 1, float_1, playerEntity, playerEntity.inventory.main.get((i + 1) * 9 + j));
+                if (smallScale) {
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scalef(0.5F, 0.5F, 1F);
                 }
-            }
-            if (smallScale) {
-                GlStateManager.popMatrix();
-            }
+                for (int i = 0; i < 3; ++i) {
+                    for (int j = 0; j < 9; ++j) {
+                        // Draw item
+                        int x = xLeft + (j * slotSize);
+                        int y = yBottom - ((3 - i) * slotSize);
+                        if (smallScale) {
+                            x *= 2;
+                            y *= 2;
+                        }
+                        this.renderHotbarItem(x + 1, y + 1, float_1, playerEntity, playerEntity.inventory.main.get((i + 1) * 9 + j));
+                    }
+                }
+                if (smallScale) {
+                    GlStateManager.popMatrix();
+                }
 
-            GuiLighting.disable();
-            GlStateManager.disableRescaleNormal();
+                GuiLighting.disable();
+                GlStateManager.disableRescaleNormal();
+            }
 //            GlStateManager.disableBlend();
         }
     }
