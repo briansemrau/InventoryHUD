@@ -1,11 +1,12 @@
 package com.github.briansemrau.inventoryhud.mixin;
 
+import com.github.briansemrau.inventoryhud.InventoryHUDMod;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.hud.*;
+import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -51,7 +52,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
     private void renderInventory(float float_1) {
         PlayerEntity playerEntity = this.getCameraPlayer();
         if (playerEntity != null) {
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.6F);
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, InventoryHUDMod.CONFIG.opacity);
 
             this.client.getTextureManager().bindTexture(INVENTORY_TEX);
             int padding = 5;

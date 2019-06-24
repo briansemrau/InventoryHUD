@@ -6,7 +6,8 @@
   "name": "Inventory HUD",
   "description": "Adds your inventory to your HUD. Nice!",
   "authors": [
-    "brian_flakes"
+    "brian_flakes",
+    "Jilm"
   ],
   "contact": {
     "homepage": "",
@@ -18,6 +19,9 @@
 
   "environment": "*",
   "entrypoints": {
+    "modmenu": [
+      "com.github.briansemrau.inventoryhud.InventoryHUDMenuApiImpl"
+    ],
     "main": [
       "com.github.briansemrau.inventoryhud.InventoryHUDMod"
     ]
@@ -32,5 +36,8 @@
   },
   "suggests": {
     "flamingo": "*"
+  },
+  "custom": {
+    "modmenu:clientsideOnly": true
   }
 }

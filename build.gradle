@@ -13,6 +13,11 @@ group = project.maven_group
 minecraft {
 }
 
+repositories {
+	maven { url = "https://minecraft.curseforge.com/api/maven" }
+	maven { url = 'http://maven.sargunv.s3-website-us-west-2.amazonaws.com/' }
+}
+
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -21,6 +26,13 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modCompile "cloth-config:ClothConfig:${project.cloth_config_version}"
+	modCompile "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
+	include "cloth-config:ClothConfig:${project.cloth_config_version}"
+	include "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
+
+	modCompile "io.github.prospector.modmenu:ModMenu:${project.mod_menu_version}"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
@@ -70,11 +82,5 @@ publishing {
 				builtBy remapSourcesJar
 			}
 		}
-	}
-
-	// select the repositories you want to publish to
-	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
 	}
 }

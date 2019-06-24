@@ -1,0 +1,5 @@
+{
+  "text.autoconfig.inventory_hud.title": "InventoryHUD Configuration",
+  "text.autoconfig.inventory_hud.category.default": "General",
+  "text.autoconfig.inventory_hud.option.opacity": "Alpha"
+}
