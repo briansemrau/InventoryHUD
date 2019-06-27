@@ -1,6 +1,8 @@
 {
   "text.autoconfig.inventory_hud.title": "InventoryHUD Configuration",
   "text.autoconfig.inventory_hud.category.default": "General",
+  "text.autoconfig.inventory_hud.option.x": "X-Axis",
+  "text.autoconfig.inventory_hud.option.y": "Y-Axis",
   "text.autoconfig.inventory_hud.option.alpha": "Alpha",
   "text.autoconfig.inventory_hud.option.show": "Shown"
 }
