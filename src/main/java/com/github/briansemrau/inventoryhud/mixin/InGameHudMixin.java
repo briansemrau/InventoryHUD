@@ -98,13 +98,13 @@ public abstract class InGameHudMixin extends DrawableHelper {
                 for (int i = 0; i < 3; ++i) {
                     for (int j = 0; j < 9; ++j) {
                         // Draw item
-                        int x = xLeft + (j * slotSize);
-                        int y = yBottom - ((3 - i) * slotSize);
+                        int x = xLeft + (j * slotSize - (int)InventoryHUDMod.CONFIG.x);
+                        int y = yBottom - ((3 - i) * slotSize + (int)InventoryHUDMod.CONFIG.y);
                         if (smallScale) {
                             x *= 2;
                             y *= 2;
                         }
-                        this.renderHotbarItem(x + 1  - (int)InventoryHUDMod.CONFIG.x, y + 1 - (int)InventoryHUDMod.CONFIG.y, float_1, playerEntity, playerEntity.inventory.main.get((i + 1) * 9 + j));
+                        this.renderHotbarItem(x + 1, y + 1, float_1, playerEntity, playerEntity.inventory.main.get((i + 1) * 9 + j));
                     }
                 }
                 if (smallScale) {
