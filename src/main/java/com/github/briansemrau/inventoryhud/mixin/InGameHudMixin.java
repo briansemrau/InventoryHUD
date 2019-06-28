@@ -79,9 +79,10 @@ public abstract class InGameHudMixin extends DrawableHelper {
             int yTop = this.scaledHeight - height - padding;
             int yBottom = this.scaledHeight - padding;
 
-            // Draw inventory background
+
             if (InventoryHUDMod.CONFIG.show) {
-                blit(xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
+                // Draw inventory background
+                blit(xLeft - (int)InventoryHUDMod.CONFIG.x, yTop - (int)InventoryHUDMod.CONFIG.y, width, height, u, v, texWidth, texHeight, 256, 256);
 
                 // Draw items
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -97,8 +98,8 @@ public abstract class InGameHudMixin extends DrawableHelper {
                 for (int i = 0; i < 3; ++i) {
                     for (int j = 0; j < 9; ++j) {
                         // Draw item
-                        int x = xLeft + (j * slotSize);
-                        int y = yBottom - ((3 - i) * slotSize);
+                        int x = xLeft + (j * slotSize - (int)InventoryHUDMod.CONFIG.x);
+                        int y = yBottom - ((3 - i) * slotSize + (int)InventoryHUDMod.CONFIG.y);
                         if (smallScale) {
                             x *= 2;
                             y *= 2;
