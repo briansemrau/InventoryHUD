@@ -8,7 +8,7 @@ import me.sargunvohra.mcmods.autoconfig1.shadowed.blue.endless.jankson.Comment;
 public class ModConfig implements ConfigData {
 
     @Comment("Changes the alpha of the Hud.")
-    public float alpha = 1;
+    public float alpha = 0.5f;
 
     @Comment("Switch between on or off.")
     public boolean show = true;
