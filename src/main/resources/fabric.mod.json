@@ -10,7 +10,8 @@
     "Jilm"
   ],
   "contact": {
-    "homepage": "",
+    "homepage": "https://curseforge.com/minecraft/mc-mods/inventoryhud",
+    "issues": "https://github.com/briansemrau/InventoryHUD/issues",
     "sources": "https://github.com/briansemrau/InventoryHUD"
   },
 
