@@ -2,15 +2,16 @@ package com.github.briansemrau.inventoryhud.mixin;
 
 import com.github.briansemrau.inventoryhud.InventoryHUDMod;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AbsoluteHand;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,12 +45,12 @@ public abstract class InGameHudMixin extends DrawableHelper {
         // method content ignored
     }
 
-    @Inject(method = "draw", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbar(F)V"))
-    public void onDraw(float float_1, CallbackInfo ci) {
-        renderInventory(float_1);
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbar(FLnet/minecraft/client/util/math/MatrixStack;)V"))
+    public void onDraw(MatrixStack matrixStack, float float_1, CallbackInfo ci) {
+        renderInventory(float_1, matrixStack);
     }
 
-    private void renderInventory(float float_1) {
+    private void renderInventory(float float_1, MatrixStack matrixStack) {
         PlayerEntity playerEntity = this.getCameraPlayer();
         if (playerEntity != null) {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, InventoryHUDMod.CONFIG.alpha);
@@ -66,8 +67,8 @@ public abstract class InGameHudMixin extends DrawableHelper {
             boolean smallScale = false;
 
             // Smaller screen resolution
-            AbsoluteHand hand = playerEntity.getMainHand();
-            int hotbarWidth = 182 + (hand == AbsoluteHand.LEFT ? 29 : 0) * 2;
+            Arm hand = playerEntity.getMainArm();
+            int hotbarWidth = 182 + (hand == Arm.LEFT ? 29 : 0) * 2;
             if (this.scaledWidth < hotbarWidth + (texWidth + padding) * 2) {
                 width /= 2;
                 height /= 2;
@@ -81,14 +82,13 @@ public abstract class InGameHudMixin extends DrawableHelper {
 
             // Draw inventory background
             if (InventoryHUDMod.CONFIG.show) {
-                blit(xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
+                drawTexture(matrixStack, xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
 
                 // Draw items
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableRescaleNormal();
                 GlStateManager.enableBlend();
-                GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                GuiLighting.enableForItems();
+                RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 
                 if (smallScale) {
                     GlStateManager.pushMatrix();
@@ -110,7 +110,6 @@ public abstract class InGameHudMixin extends DrawableHelper {
                     GlStateManager.popMatrix();
                 }
 
-                GuiLighting.disable();
                 GlStateManager.disableRescaleNormal();
             }
 //            GlStateManager.disableBlend();
