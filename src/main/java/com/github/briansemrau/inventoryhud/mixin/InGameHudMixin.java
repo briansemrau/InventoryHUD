@@ -41,7 +41,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
     }
 
     @Shadow
-    private void renderHotbarItem(int int_1, int int_2, float float_1, PlayerEntity playerEntity_1, ItemStack itemStack_1) {
+    private void renderHotbarItem(int x, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
         // method content ignored
     }
 
@@ -53,9 +53,10 @@ public abstract class InGameHudMixin extends DrawableHelper {
     private void renderInventory(float float_1, MatrixStack matrixStack) {
         PlayerEntity playerEntity = this.getCameraPlayer();
         if (playerEntity != null) {
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, InventoryHUDMod.CONFIG.alpha);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, InventoryHUDMod.CONFIG.alpha);
 
-            this.client.getTextureManager().bindTexture(INVENTORY_TEX);
+            //this.client.getTextureManager().bindTexture(INVENTORY_TEX);
+            RenderSystem.setShaderTexture(0, INVENTORY_TEX);
             int padding = 5;
             int texWidth = 162;
             int texHeight = 54;
@@ -85,15 +86,15 @@ public abstract class InGameHudMixin extends DrawableHelper {
                 drawTexture(matrixStack, xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
 
                 // Draw items
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                GlStateManager.enableRescaleNormal();
-                GlStateManager.enableBlend();
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.enableBlend();
                 RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 
                 if (smallScale) {
-                    GlStateManager.pushMatrix();
-                    GlStateManager.scalef(0.5F, 0.5F, 1F);
+                    matrixStack.push();
+                    matrixStack.scale(0.5F, 0.5F, 1.0F);
                 }
+                int m = 1;
                 for (int i = 0; i < 3; ++i) {
                     for (int j = 0; j < 9; ++j) {
                         // Draw item
@@ -103,16 +104,14 @@ public abstract class InGameHudMixin extends DrawableHelper {
                             x *= 2;
                             y *= 2;
                         }
-                        this.renderHotbarItem(x + 1, y + 1, float_1, playerEntity, playerEntity.inventory.main.get((i + 1) * 9 + j));
+                        this.renderHotbarItem(x + 1, y + 1, float_1, playerEntity, playerEntity.getInventory().main.get((i + 1) * 9 + j), m++);
                     }
                 }
                 if (smallScale) {
-                    GlStateManager.popMatrix();
+                    matrixStack.pop();
                 }
-
-                GlStateManager.disableRescaleNormal();
             }
-//            GlStateManager.disableBlend();
+            RenderSystem.disableBlend();
         }
     }
 
