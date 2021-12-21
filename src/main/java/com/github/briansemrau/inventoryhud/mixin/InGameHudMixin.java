@@ -1,7 +1,6 @@
 package com.github.briansemrau.inventoryhud.mixin;
 
 import com.github.briansemrau.inventoryhud.InventoryHUDMod;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -88,7 +87,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
                 // Draw items
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 RenderSystem.enableBlend();
-                RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+                RenderSystem.defaultBlendFunc();
 
                 if (smallScale) {
                     matrixStack.push();
@@ -111,7 +110,8 @@ public abstract class InGameHudMixin extends DrawableHelper {
                     matrixStack.pop();
                 }
             }
-            RenderSystem.disableBlend();
+
+            RenderSystem.enableBlend();
         }
     }
 
