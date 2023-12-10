@@ -5,9 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
@@ -21,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)
-public abstract class InGameHudMixin extends DrawableHelper {
+public abstract class InGameHudMixin {
 
     private static final Identifier INVENTORY_TEX = new Identifier("textures/gui/container/inventory.png");
 
@@ -40,22 +39,21 @@ public abstract class InGameHudMixin extends DrawableHelper {
     }
 
     @Shadow
-    private void renderHotbarItem(int x, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
+    private void renderHotbarItem(DrawContext context, int x, int y, float f, PlayerEntity player, ItemStack stack, int seed) {
         // method content ignored
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbar(FLnet/minecraft/client/util/math/MatrixStack;)V"))
-    public void onDraw(MatrixStack matrixStack, float float_1, CallbackInfo ci) {
-        renderInventory(float_1, matrixStack);
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbar(FLnet/minecraft/client/gui/DrawContext;)V"))
+    public void onDraw(DrawContext context, float tickDelta, CallbackInfo ci) {
+        this.renderInventory(context, tickDelta);
     }
 
-    private void renderInventory(float float_1, MatrixStack matrixStack) {
+    private void renderInventory(DrawContext context, float tickDelta) {
         PlayerEntity playerEntity = this.getCameraPlayer();
         if (playerEntity != null) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, InventoryHUDMod.CONFIG.alpha);
 
-            //this.client.getTextureManager().bindTexture(INVENTORY_TEX);
-            RenderSystem.setShaderTexture(0, INVENTORY_TEX);
+            RenderSystem.setShaderTexture(0, InGameHudMixin.INVENTORY_TEX);
             int padding = 5;
             int texWidth = 162;
             int texHeight = 54;
@@ -82,7 +80,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
 
             // Draw inventory background
             if (InventoryHUDMod.CONFIG.show) {
-                drawTexture(matrixStack, xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
+                context.drawTexture(INVENTORY_TEX, xLeft, yTop, width, height, u, v, texWidth, texHeight, 256, 256);
 
                 // Draw items
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -90,10 +88,10 @@ public abstract class InGameHudMixin extends DrawableHelper {
                 RenderSystem.defaultBlendFunc();
 
                 if (smallScale) {
-                    matrixStack.push();
-                    matrixStack.scale(0.5F, 0.5F, 1.0F);
+                    context.getMatrices().push();
+                    context.getMatrices().scale(0.5F, 0.5F, 0.5F);
                 }
-                int m = 1;
+                int slot = 9;
                 for (int i = 0; i < 3; ++i) {
                     for (int j = 0; j < 9; ++j) {
                         // Draw item
@@ -103,11 +101,12 @@ public abstract class InGameHudMixin extends DrawableHelper {
                             x *= 2;
                             y *= 2;
                         }
-                        this.renderHotbarItem(x + 1, y + 1, float_1, playerEntity, playerEntity.getInventory().main.get((i + 1) * 9 + j), m++);
+                        this.renderHotbarItem(context, x + 1, y + 1, tickDelta, playerEntity, playerEntity.getInventory().main.get(slot), slot);
+                        slot++;
                     }
                 }
                 if (smallScale) {
-                    matrixStack.pop();
+                    context.getMatrices().pop();
                 }
             }
 
