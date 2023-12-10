@@ -1,17 +1,17 @@
 package com.github.briansemrau.inventoryhud;
 
-import me.sargunvohra.mcmods.autoconfig1.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1.serializer.JanksonConfigSerializer;
-import net.fabricmc.api.ModInitializer;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class InventoryHUDMod implements ModInitializer {
+public class InventoryHUDMod implements ClientModInitializer {
 
 	public static final String MOD_ID = "inventory_hud";
 
 	public static ModConfig CONFIG = null;
 
 	@Override
-	public void onInitialize() {
+	public void onInitializeClient() {
 		InventoryHUDMod.CONFIG = AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new).getConfig();
 	}
 
